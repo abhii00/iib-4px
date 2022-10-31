@@ -16,3 +16,11 @@ Qa = [a, b, c, d];
 Q = compact(Qm).';
 %simulink -> matlab
 Qm = quaternion(Q.');
+%matlab -> aerospace
+Qa = compact(Qm);
+%aerospace -> matlab
+Qm = quaternion(Qa);
+%simulink -> aerospace
+Qa = Q.';
+%aerospace -> simulink
+Q = Qa.';
