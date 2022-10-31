@@ -25,37 +25,36 @@ end
 visualiseenv(offset)
 
 %initial states and setup for animation
-s = animatedline('Color', 'r', 'DisplayName', 'State');
+s = animatedline(rs_sta(1, 1), rs_sta(1, 2), rs_sta(1, 3), 'Color', 'r', 'DisplayName', 'State');
 sp = scatter3(rs_sta(1, 1), rs_sta(1, 2), rs_sta(1, 3), 'filled', 'ro', 'DisplayName', 'Current State');
 scatter3(rs_sta(1, 1), rs_sta(1, 2), rs_sta(1, 3), 'ro', 'DisplayName', 'Initial State');
 
 %initial target and setup for animation
-t = animatedline('Color', 'g', 'DisplayName', 'Target');
+t = animatedline(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'Color', 'g', 'DisplayName', 'Target');
 tp = scatter3(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'filled', 'go', 'DisplayName', 'Current Target');
 scatter3(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'go', 'DisplayName', 'Initial Target');
 
 legend('Location','northeast');
-view(145, 0);
+view(90, 0);
 
 %animate
 for k = 2:length(out.tout)
-    %update state
-    addpoints(s, rs_sta(k, 1), rs_sta(k, 2), rs_sta(k, 3));
-    sp.XData = rs_sta(k, 1);
-    sp.YData = rs_sta(k, 2);
-    sp.ZData = rs_sta(k, 3);
-
-    %update targets
-    addpoints(t, rs_tar(k, 1), rs_tar(k, 1), rs_tar(k, 1));
-    tp.XData = rs_tar(k, 1);
-    tp.YData = rs_tar(k, 2);
-    tp.ZData = rs_tar(k, 3);
-
-    %wait
-    if (out.tout(k)-out.tout(k-1) > 0.2)
-        pause((out.tout(k)-out.tout(k-1))/64)
+    if mod(k, 10) == 0
+        %update state
+        addpoints(s, rs_sta(k, 1), rs_sta(k, 2), rs_sta(k, 3));
+        sp.XData = rs_sta(k, 1);
+        sp.YData = rs_sta(k, 2);
+        sp.ZData = rs_sta(k, 3);
+    
+        %update targets
+        addpoints(t, rs_tar(k, 1), rs_tar(k, 2), rs_tar(k, 3));
+        tp.XData = rs_tar(k, 1);
+        tp.YData = rs_tar(k, 2);
+        tp.ZData = rs_tar(k, 3);
+    
+        title(out.tout(k));
+        drawnow;
     end
-    title(out.tout(k))
 end
 
 %final state and target and delete animation
