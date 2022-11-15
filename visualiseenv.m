@@ -1,4 +1,12 @@
 function visualiseenv(offset)
+%plots the environment including the sphere, and the axes
+%
+%Arguments:
+%   offset (float): the offset of the data so to alter the axes plots
+%
+%Returns:
+%   None
+
     %sphere
     [xsphere, ysphere, zsphere] = sphere;
     s = surf(xsphere, ysphere, zsphere, 'DisplayName', 'Attitude Sphere');
