@@ -1,4 +1,4 @@
-function visualisetraj(Qs_sta, Qs_tar, tout, p, offset)
+function visualisetraj(Qs_sta, Qs_tar, tout, p, offset, speed)
 %visualises the results of the simulation
 %
 %Arguments:
@@ -7,7 +7,8 @@ function visualisetraj(Qs_sta, Qs_tar, tout, p, offset)
 %   tout (array): the time array
 %   p (3x1 array): the axis to point, defaults to [1, 0, 0]
 %   offset (float): the offset for the points, defaults to 1.05
-%   
+%   speed (float): the multiplier in time   
+%
 %Returns:
 %   None
 
@@ -17,6 +18,7 @@ function visualisetraj(Qs_sta, Qs_tar, tout, p, offset)
         tout
         p = [1, 0, 0]
         offset = 1.05
+        speed = 1
     end
     
     %CALCULATE
@@ -54,7 +56,7 @@ function visualisetraj(Qs_sta, Qs_tar, tout, p, offset)
     
     %animate
     for k = 2:length(tout)
-        if mod(k, 1) == 0
+        if mod(k, speed) == 0
             %update state
             addpoints(s, rs_sta(k, 1), rs_sta(k, 2), rs_sta(k, 3));
             sp.XData = rs_sta(k, 1);
@@ -69,7 +71,7 @@ function visualisetraj(Qs_sta, Qs_tar, tout, p, offset)
         
             title(['t = ', num2str(tout(k)), 's']);
             view(rad2deg(atan2(rs_sta(k, 2), rs_sta(k, 1))) + 90, rad2deg(asin(rs_sta(k, 3)/offset)));
-            drawnow limitrate;
+            drawnow
         end
     end
     

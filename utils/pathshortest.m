@@ -26,7 +26,7 @@ function pathshortest(qm_1, qm_2, N, offset)
     %convert interpolated from qm into cartesian
     rs = zeros(length(qms), 3);
     for i = 1:length(qms)
-        rs(i, :) = offset*quatdeconstruct(qms(i), 'matlab', 'cartesian');
+        rs(i, :) = offset*quatdeconstruct(qms(i), 'matlab', 'cartesian')
     end
 
     %convert initial and end from qm into cartesian
