@@ -10,22 +10,29 @@ import qcsv from '../sim.csv'
  * @param renderer the renderer
  */
  function animation(scene, camera, renderer){
-    const light = new THREE.AmbientLight(0xf0f0f0); // soft white light
-    const axes = new THREE.AxesHelper(5,);
-    axes.setColors(0xffff00, 0xff00ff, 0x00ffff);
-    const sf = 1.2;
-        
+    // aprameters
+    const p = new THREE.Vector3(1, 0, 0); // pointing
+    const speed = 256; // speed
+    const b = 1; // body size
+    const sf = 1.2; // scale factor
+
+    // origin, lighting and axes
+    const o = new THREE.Vector3(0, 0, 0); // origin
+    const light = new THREE.AmbientLight(0xf0f0f0);
+    const axes_x = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), o, 4*sf*b, 0xffff00);
+    const axes_y = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), o, 4*sf*b, 0xff00ff);
+    const axes_z = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), o, 4*sf*b, 0x00ffff);
+    
     // create common geometry and materials
-    const sc_geometry = new THREE.BoxGeometry(1, 1, 1);
+    const sc_geometry = new THREE.BoxGeometry(b, b, b);
     const sc_wire_geometry = new THREE.EdgesGeometry(sc_geometry);
     const line_material = new THREE.LineBasicMaterial({color: 0xffffff});
-    const p = new THREE.Vector3(1, 0, 0);
 
-    // current spacecraft
-    const current_material = new THREE.MeshStandardMaterial({color: 0xaaaaaa});
-    const current = new THREE.Mesh(sc_geometry, current_material);
-    const current_wireframe = new THREE.LineSegments(sc_wire_geometry, line_material); 
-    const current_p = new THREE.ArrowHelper(p.normalize(), new THREE.Vector3(0, 0, 0), sf, 0xff0000);
+    // actual spacecraft
+    const actual_material = new THREE.MeshStandardMaterial({color: 0xaaaaaa});
+    const actual = new THREE.Mesh(sc_geometry, actual_material);
+    const actual_wireframe = new THREE.LineSegments(sc_wire_geometry, line_material); 
+    const actual_p = new THREE.ArrowHelper(p, new THREE.Vector3(0, 0, 0), sf*b, 0xff0000); 
     
     // target spacecraft
     const target_material = new THREE.MeshStandardMaterial({color: 0xaaaaaa, transparent: true, opacity: 0.3});
@@ -33,48 +40,49 @@ import qcsv from '../sim.csv'
     const target_wireframe = new THREE.LineSegments(sc_wire_geometry, line_material);    
     target.scale.set(sf, sf, sf);
     target_wireframe.scale.set(sf, sf, sf);
-    const target_p = new THREE.ArrowHelper(p.normalize(), new THREE.Vector3(0, 0, 0), sf, 0x00ff00);
+    const target_p = new THREE.ArrowHelper(p, new THREE.Vector3(0, 0, 0), sf*b, 0x00ff00);
 
     // add to scene
     scene.add(light);
-    scene.add(axes);
-    scene.add(current);
-    scene.add(current_wireframe);
-    scene.add(current_p);
+    scene.add(axes_x);
+    scene.add(axes_y);
+    scene.add(axes_z);
+    scene.add(actual);
+    scene.add(actual_wireframe);
+    scene.add(actual_p);
     scene.add(target);
     scene.add(target_wireframe);
     scene.add(target_p);
     
     // read quaternion information
-    var r = [];
-    const tout = [];
-    const Qs_sta = [];
-    const Qs_tar = [];
+    const ts = [];
+    const qs_acc = [];
+    const qs_tar = [];
     var dataLoad = false;
     Papa.parse(qcsv, {
         header: false,
         download: true,
         skipEmptyLines: true,
         complete: res => {
-            r = res.data;
-            for (let i = 0; i < r.length; i++) {
-                const l = r[i];
-                tout.push(parseFloat(l[0]));
-                Qs_sta.push(new THREE.Quaternion(parseFloat(l[2]), parseFloat(l[3]), parseFloat(l[4]), parseFloat(l[1])));
-                Qs_tar.push(new THREE.Quaternion(parseFloat(l[6]), parseFloat(l[7]), parseFloat(l[8]), parseFloat(l[5])));
+            for (let i = 0; i < res.data.length; i++) {
+                const l = res.data[i];
+                ts.push(parseFloat(l[0]));
+                qs_acc.push(new THREE.Quaternion(parseFloat(l[2]), parseFloat(l[3]), parseFloat(l[4]), parseFloat(l[1])));
+                qs_tar.push(new THREE.Quaternion(parseFloat(l[6]), parseFloat(l[7]), parseFloat(l[8]), parseFloat(l[5])));
             }
             dataLoad = true;
         },
     });    
 
     /**
-     * Rotate Current: Rotates all the current state objects to a given orientation
+     * Rotate Actual: Rotates all the actual state objects to a given orientation
      * @param q the quaternion representing the orientation to rotate to
      */
-    function rotateCurrent(q){
-        current.setRotationFromQuaternion(q);
-        current_wireframe.setRotationFromQuaternion(q);
-        current_p.applyQuaternion(q);
+    function rotateActual(q){
+        actual.setRotationFromQuaternion(q);
+        actual_wireframe.setRotationFromQuaternion(q);
+        actual_p.setDirection(p);
+        actual_p.applyQuaternion(q);
     };
 
     /**
@@ -84,14 +92,12 @@ import qcsv from '../sim.csv'
      function rotateTarget(q){
         target.setRotationFromQuaternion(q);
         target_wireframe.setRotationFromQuaternion(q);
+        target_p.setDirection(p);
         target_p.applyQuaternion(q);
     };
 
-    const speed = 256;
     const clock = new THREE.Clock();
     var i = 0;
-    var q_sta = current.quaternion;
-    var q_tar = target.quaternion;
     /**
      * animator
      */
@@ -99,16 +105,12 @@ import qcsv from '../sim.csv'
         requestAnimationFrame(animate);
         if (dataLoad){
             var t = clock.getElapsedTime();
-            if (t > tout[i]/speed && t < tout[tout.length - 1]/speed){
+            if (t > ts[i]/speed && t < ts[ts.length - 1]/speed){
                 // update quaternions from list
-                q_sta = Qs_sta[i+1];
-                q_tar = Qs_tar[i+1];
+                rotateActual(qs_acc[i+1]);
+                rotateTarget(qs_tar[i+1]);
                 i++
             }
-            current_p.setDirection(p.normalize());
-            target_p.setDirection(p.normalize());
-            rotateCurrent(q_sta);
-            rotateTarget(q_tar);
         }
         render();
     };

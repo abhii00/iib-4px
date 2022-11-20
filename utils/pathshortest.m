@@ -1,11 +1,12 @@
-function pathshortest(qm_1, qm_2, N, offset)
-%plots the shortest path between two given quaternions with a given
-%discretisation
+function pathshortest(qm_1, qm_2, N, p, offset)
+%plots the shortest path between two given quaternion pointings of an axis
+%with a given discretisation
 %
 %Arguments:
 %   qm_1 (quaternion): the quaternion to start the path at
 %   qm_2 (quaternion): the quaternion to end the path at
 %   N (int): the number of points on the path (including start and end)
+%   p (3x1 array): the axis to point, defaults to [1, 0, 0]
 %   offset (float): the offset for the points, defaults to 1.05
 %
 %Returns:
@@ -15,6 +16,7 @@ function pathshortest(qm_1, qm_2, N, offset)
         qm_1
         qm_2
         N
+        p = [1, 0, 0]
         offset = 1.05
     end
 
@@ -23,15 +25,15 @@ function pathshortest(qm_1, qm_2, N, offset)
     qms = slerp(qm_1, qm_2, linspace(0, 1, N));
     qms = qms(2:end-1);
 
-    %convert interpolated from qm into cartesian
+    %rotate p using interpolated qm
     rs = zeros(length(qms), 3);
     for i = 1:length(qms)
-        rs(i, :) = offset*quatdeconstruct(qms(i), 'matlab', 'cartesian')
+        rs(i, :) = offset * rotatepoint(qms(i), p);
     end
 
-    %convert initial and end from qm into cartesian
-    r1 = offset*quatdeconstruct(qm_1, 'matlab', 'cartesian');
-    r2 = offset*quatdeconstruct(qm_2, 'matlab', 'cartesian');
+    %rotate p using initial and final qm
+    r1 = offset * rotatepoint(qm_1, p);
+    r2 = offset * rotatepoint(qm_2, p);
 
     %PLOT
     visualiseenv(offset)

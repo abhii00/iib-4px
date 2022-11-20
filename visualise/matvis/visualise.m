@@ -1,5 +1,6 @@
+%shortcut file to visualise, after prep run
 p = [1, 0, 0];
 figure;
-visualiseconv(Qs_sta, Qs_tar, tout, p);
+visualiseconv(qs_acc, qs_tar, ts, p);
 figure;
-visualisetraj(Qs_sta, Qs_tar, tout, p);
+visualisetraj(qs_acc, qs_tar, ts, p);

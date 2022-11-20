@@ -1,36 +1,36 @@
-function visualiseconv(Qs_sta, Qs_tar, tout, p)
+function visualiseconv(qs_acc, qs_tar, ts, p)
 %visualises the convergence of the simulation
 %
 %Arguments:
-%   Qs_sta (array): the quaternion array for the states
-%   Qs_tar (array): the quaternion array for the target
-%   tout (array): the time array
+%   qs_acc (array): the quaternion array for the actual state
+%   qs_tar (array): the quaternion array for the target state
+%   ts (array): the ts array
 %   p (3x1 array): the axis to point, defaults to [1, 0, 0]
 %   
 %Returns:
 %   None
 
     arguments
-        Qs_sta
-        Qs_tar
-        tout
+        qs_acc
+        qs_tar
+        ts
         p = [1, 0, 0]
     end
 
     %CALCULATE
-    %iterate over time
-    thetas = zeros(length(tout), 1);
-    for i = 1:length(tout)
+    %iterate over ts
+    thetas = zeros(length(ts), 1);
+    for i = 1:length(ts)
         %convert from q to qm
-        qm_sta = quatconvert(Qs_sta(:, :, i), 'simulink', 'matlab');
-        qm_tar = quatconvert(Qs_tar(:, :, i), 'simulink', 'matlab');
+        qm_acc = quatconvert(qs_acc(:, :, i), 'simulink', 'matlab');
+        qm_tar = quatconvert(qs_tar(:, :, i), 'simulink', 'matlab');
     
         %find angular difference between target and state
-        thetas(i) = dist(qm_sta, qm_tar);
+        thetas(i) = dist(qm_acc, qm_tar);
     end
 
     %PLOT
-    plot(tout, thetas, 'Color', [1, 0, 1]);
+    plot(ts, thetas, 'Color', [1, 0, 1]);
     xlabel('t (s)');
     ylabel('\delta\theta')
-    title(['Convergence Plot, ITAE = ', num2str(evaluateperfITAE(tout, thetas))])
+    title(['Convergence Plot, ITAE = ', num2str(evaluateperfITAE(ts, thetas))])

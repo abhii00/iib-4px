@@ -1,9 +1,10 @@
-function pathdefined(ts, path, offset)
-%plots a given parameterised path
+function pathdefined(ts, path, p, offset)
+%plots a parametrised quaternion axis pointing for a given path
 %
 %Arguments:
 %   ts (array(float)): the list of parameters to plot for
-%   path (handle): the handle to the path function
+%   path (handle): the handle to the Q(t) path function
+%   p (3x1 array): the axis to point, defaults to [1, 0, 0]
 %   offset (float): the offset for the points, defaults to 1.05
 %
 %Returns:
@@ -12,6 +13,7 @@ function pathdefined(ts, path, offset)
     arguments
         ts
         path
+        p = [1, 0, 0]
         offset = 1.05
     end
   
@@ -22,14 +24,12 @@ function pathdefined(ts, path, offset)
     
     %iterate over paramter
     for i = 1:length(ts)-1
-        %find theta, phi from function
-        [theta, phi] = path(ts(i));
+        %find qm from path
+        qms(i) = path(ts(i));
     
-        %convert spherical to qm
-        qms(i) = quatconstruct([1, theta, phi], 'spherical', 'matlab');
-    
+        %rotate p using qm    
         %convert qm to cartesian
-        rs(i, :) = offset*quatdeconstruct(qms(i), 'matlab', 'cartesian');
+        rs(i, :) = offset * rotatepoint(qms(i), p);
     end
     
     %PLOT

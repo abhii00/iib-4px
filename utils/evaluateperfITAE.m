@@ -1,8 +1,8 @@
-function perf = evaluateperfITAE(t, err, norm)
+function perf = evaluateperfITAE(ts, err, norm)
 %evaluates the performance using ITAE
 %
 %Arguments:
-%   t (list(float)): list of times
+%   ts (list(float)): list of times
 %   err (list(float)): list of errors
 %   norm (int): normalisation factor
 %
@@ -10,11 +10,11 @@ function perf = evaluateperfITAE(t, err, norm)
 %   float: the ITAE index
 
     arguments
-        t
+        ts
         err
         norm = 1
     end
 
-    i = cumtrapz(t, t.*abs(err)/norm);
+    i = cumtrapz(ts, ts.*abs(err)/norm);
     perf = i(end);
 end

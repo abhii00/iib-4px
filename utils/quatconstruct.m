@@ -1,5 +1,5 @@
 function Q = quatconstruct(vec, iptype, optype)
-%creates a quaternion from a standard vector
+%creates a quaternion from a standard direction vector
 %
 %Arguments:
 %   vec (3x1 vector): the vector to be converted

@@ -1,47 +1,47 @@
-function visualisetraj(Qs_sta, Qs_tar, tout, p, offset, speed)
+function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
 %visualises the results of the simulation
 %
 %Arguments:
-%   Qs_sta (array): the quaternion array for the states
-%   Qs_tar (array): the quaternion array for the target
-%   tout (array): the time array
+%   qs_acc (array): the quaternion array for the actual state
+%   qs_tar (array): the quaternion array for the target state
+%   ts (array): the ts array
 %   p (3x1 array): the axis to point, defaults to [1, 0, 0]
 %   offset (float): the offset for the points, defaults to 1.05
-%   speed (float): the multiplier in time   
+%   speed (float): time scale factor
 %
 %Returns:
 %   None
 
     arguments
-        Qs_sta
-        Qs_tar
-        tout
+        qs_acc
+        qs_tar
+        ts
         p = [1, 0, 0]
         offset = 1.05
         speed = 1
     end
     
     %CALCULATE
-    %iterate over time
-    rs_sta = zeros(length(tout), 3);
-    rs_tar = zeros(length(tout), 3);
-    for i = 1:length(tout)
+    %iterate over ts
+    rs_acc = zeros(length(ts), 3);
+    rs_tar = zeros(length(ts), 3);
+    for i = 1:length(ts)
         %convert from q to qm
-        qm_sta = quatconvert(Qs_sta(:, :, i), 'simulink', 'matlab');
-        qm_tar = quatconvert(Qs_tar(:, :, i), 'simulink', 'matlab');
+        qm_acc = quatconvert(qs_acc(:, :, i), 'simulink', 'matlab');
+        qm_tar = quatconvert(qs_tar(:, :, i), 'simulink', 'matlab');
     
-        %rotate p to correct orientation
-        rs_sta(i, :) = offset * rotatepoint(qm_sta, p);
+        %rotate p using qm data
+        rs_acc(i, :) = offset * rotatepoint(qm_acc, p);
         rs_tar(i, :) = offset * rotatepoint(qm_tar, p);
     end
     
     %PLOT
     visualiseenv(offset)
     
-    %initial states and setup for animation
-    s = animatedline(rs_sta(1, 1), rs_sta(1, 2), rs_sta(1, 3), 'Color', 'r', 'DisplayName', 'State');
-    sp = scatter3(rs_sta(1, 1), rs_sta(1, 2), rs_sta(1, 3), 'filled', 'ro', 'DisplayName', 'Current State');
-    scatter3(rs_sta(1, 1), rs_sta(1, 2), rs_sta(1, 3), 'ro', 'DisplayName', 'Initial State');
+    %initial actual and setup for animation
+    s = animatedline(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'Color', 'r', 'DisplayName', 'Actual');
+    sp = scatter3(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'filled', 'ro', 'DisplayName', 'Current Actual');
+    scatter3(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'ro', 'DisplayName', 'Initial State');
     
     %initial target and setup for animation
     t = animatedline(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'Color', 'g', 'DisplayName', 'Target');
@@ -51,34 +51,35 @@ function visualisetraj(Qs_sta, Qs_tar, tout, p, offset, speed)
     %add legend
     legend('Location','northeast');
 
-    %track state
-    view(rad2deg(atan2(rs_sta(1, 2), rs_sta(1, 1))) + 90, rad2deg(asin(rs_sta(1, 3)/offset)));
+    %track actual
+    view(rad2deg(atan2(rs_acc(1, 2), rs_acc(1, 1))) + 90, rad2deg(asin(rs_acc(1, 3)/offset)));
     
     %animate
-    for k = 2:length(tout)
+    for k = 2:length(ts)
         if mod(k, speed) == 0
-            %update state
-            addpoints(s, rs_sta(k, 1), rs_sta(k, 2), rs_sta(k, 3));
-            sp.XData = rs_sta(k, 1);
-            sp.YData = rs_sta(k, 2);
-            sp.ZData = rs_sta(k, 3);
+            %update actual
+            addpoints(s, rs_acc(k, 1), rs_acc(k, 2), rs_acc(k, 3));
+            sp.XData = rs_acc(k, 1);
+            sp.YData = rs_acc(k, 2);
+            sp.ZData = rs_acc(k, 3);
         
-            %update targets
+            %update target
             addpoints(t, rs_tar(k, 1), rs_tar(k, 2), rs_tar(k, 3));
             tp.XData = rs_tar(k, 1);
             tp.YData = rs_tar(k, 2);
             tp.ZData = rs_tar(k, 3);
         
-            title(['t = ', num2str(tout(k)), 's']);
-            view(rad2deg(atan2(rs_sta(k, 2), rs_sta(k, 1))) + 90, rad2deg(asin(rs_sta(k, 3)/offset)));
+            %update title and view
+            title(['t = ', num2str(ts(k)), 's']);
+            view(rad2deg(atan2(rs_acc(k, 2), rs_acc(k, 1))) + 90, rad2deg(asin(rs_acc(k, 3)/offset)));
             drawnow
         end
     end
     
-    %final state and target and delete animation
+    %final actual and target and delete animation
     delete(sp);
     delete(tp);
-    scatter3(rs_sta(end, 1), rs_sta(end, 2), rs_sta(end, 3), 'rx', 'DisplayName', 'Final State');
+    scatter3(rs_acc(end, 1), rs_acc(end, 2), rs_acc(end, 3), 'rx', 'DisplayName', 'Final Actual');
     scatter3(rs_tar(end, 1), rs_tar(end, 2), rs_tar(end, 3), 'gx', 'DisplayName', 'Final Target');
     
     %readd legend
