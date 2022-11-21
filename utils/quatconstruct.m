@@ -6,7 +6,6 @@ function Q = quatconstruct(vec, iptype, optype)
 %   iptype (string): the input type of the vector from 'cartesian', 'spherical', 'rotation' 
 %   optype (string): the output type of the quaternion from 'matlab', 'simulink' or 'aerospace'
 %   
-%
 %Returns:
 %   quaternion if optype is 'matlab', 4x1 array if optype is 'simulink' or
 %   1x4 array if optype is 'aerospace' 

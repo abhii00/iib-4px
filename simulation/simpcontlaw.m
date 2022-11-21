@@ -27,12 +27,13 @@ function tau_tot = simpcontlaw(q_tar, q_acc, qd_acc, ks, lambdas, ps)
         p_tar = rotatepoint(qm_tar, p);
 
         %find w_acc
-        wm_acc = conj(qm_acc)*qmd_acc;
-        T = conj(qm_acc)*quaternion(0, p(1), p(2), p(3))*(qm_acc);
-        pmd_acc = -wm_acc*T + T*wm_acc;
+        qwm_acc = 2*qmd_acc*conj(qm_acc);
+        qw_acc = quatconvert(qwm_acc, 'matlab', 'simulink');
+        w_acc = qw_acc(2:4);
+        pd_acc = cross(w_acc, p_acc); 
                 
         %find torque for that direction
-        taus(j, :) = cross(p_acc, ks(j) * (p_tar - p_acc) - lambdas(j) * pmd_acc);
+        taus(j, :) = cross(p_acc, ks(j) * (p_tar - p_acc) - lambdas(j) * pd_acc);
     end
 
     %find torque
