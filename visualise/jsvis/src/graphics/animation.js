@@ -68,7 +68,7 @@ import qcsv from '../sim.csv'
                 const l = res.data[i];
                 ts.push(parseFloat(l[0]));
                 qs_acc.push(new THREE.Quaternion(parseFloat(l[2]), parseFloat(l[3]), parseFloat(l[4]), parseFloat(l[1])));
-                qs_tar.push(new THREE.Quaternion(parseFloat(l[6]), parseFloat(l[7]), parseFloat(l[8]), parseFloat(l[5])));
+                qs_tar.push(new THREE.Quaternion(parseFloat(l[14]), parseFloat(l[15]), parseFloat(l[16]), parseFloat(l[13])));
             }
             dataLoad = true;
         },

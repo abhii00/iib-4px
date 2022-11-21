@@ -16,7 +16,8 @@ function Q_o = quatconvert(Q_i, iptype, optype)
 %Definitions:
 %   Q = a + bi + cj + dk
 %   q = Q/|Q|
-%   V = rotation vector for Q with magnitude theta, axis p
+%   Note: qd and qdd represent rate of change of normalized quaternion rather
+%   than being normalized themselves
 %
 %   Matlab Definition: object, 1x4: Qm = quaternion(a, b, c, d) or
 %   quaternion([a, b, c, d]) 
