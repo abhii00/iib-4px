@@ -10,18 +10,21 @@ import qcsv from '../sim.csv'
  * @param renderer the renderer
  */
  function animationcube(scene, camera, renderer){
-    // aprameters
+    // parameters
     const p = new THREE.Vector3(1, 0, 0); // pointing
     const speed = 256; // speed
-    const b = 1; // body size
+    const b = 3; // body size
     const sf = 1.2; // scale factor
 
     // origin, lighting and axes
     const o = new THREE.Vector3(0, 0, 0); // origin
+    const x = new THREE.Vector3(1, 0, 0);
+    const y = new THREE.Vector3(0, 1, 0);
+    const z = new THREE.Vector3(0, 0, 1);
+    const axes_x = new THREE.ArrowHelper(x, o, 4*sf*b, 0xffff00);
+    const axes_y = new THREE.ArrowHelper(y, o, 4*sf*b, 0xff00ff);
+    const axes_z = new THREE.ArrowHelper(z, o, 4*sf*b, 0x00ffff);
     const light = new THREE.AmbientLight(0xf0f0f0);
-    const axes_x = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), o, 4*sf*b, 0xffff00);
-    const axes_y = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), o, 4*sf*b, 0xff00ff);
-    const axes_z = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), o, 4*sf*b, 0x00ffff);
     
     // create common geometry and materials
     const sc_geometry = new THREE.BoxGeometry(b, b, b);

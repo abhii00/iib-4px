@@ -1,7 +1,7 @@
 import React from 'react';
 import * as THREE from "three";
 import { setupScene, resizeScene } from '../graphics/graphics.js';
-import { animationcube, animationcubewithpanels } from '../graphics/animations.js';
+import { animationrw } from '../graphics/animations.js';
 
 import '../css/App.css';
 
@@ -16,7 +16,7 @@ class App extends React.Component{
 
     [scene, camera, renderer] = setupScene(new THREE.Vector3(-2, -2, -2));
     this.mount.appendChild(renderer.domElement);
-    animation(scene, camera, renderer);
+    animationrw(scene, camera, renderer);
 
     window.addEventListener('resize', () => {resizeScene(camera, renderer)});
     }
