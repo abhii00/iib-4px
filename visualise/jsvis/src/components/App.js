@@ -1,7 +1,7 @@
 import React from 'react';
 import * as THREE from "three";
 import { setupScene, resizeScene } from '../graphics/graphics.js';
-import { animation } from '../graphics/animation.js';
+import { animationcube, animationcubewithpanels } from '../graphics/animations.js';
 
 import '../css/App.css';
 

@@ -24,9 +24,13 @@ function visualiseconv(qs_acc, qs_tar, ts, p)
         %convert from q to qm
         qm_acc = quatconvert(qs_acc(:, :, i), 'simulink', 'matlab');
         qm_tar = quatconvert(qs_tar(:, :, i), 'simulink', 'matlab');
+
+        %rotate p using qm data
+        p_acc = rotatepoint(qm_acc, p);
+        p_tar = rotatepoint(qm_tar, p);
     
         %find angular difference between target and state
-        thetas(i) = dist(qm_acc, qm_tar);
+        thetas(i) = atan2(norm(cross(p_acc,p_tar)),dot(p_acc,p_tar));
     end
 
     %PLOT

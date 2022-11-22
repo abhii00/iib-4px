@@ -8,7 +8,7 @@ function q_tar = refpath(t, a)
 %Returns:
 %   q_tar (4x1 array): the target quaternion
     if (a == 0)
-        ax = [0, 0, 1];
+        ax = [1, 1, 0];
         rot = pi/8 * (t > 100);
         qm_tar = quatconstruct(rot*ax, 'rotation', 'matlab');
     end
