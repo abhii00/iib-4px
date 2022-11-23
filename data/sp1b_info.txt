@@ -1,0 +1,11 @@
+23/11/22
+SCMODELCUBEWITHPANELS
+p=[1 0 0]
+k=[5]
+lambda=[5] 
+0 -> PI/2 AROUND XZ WITH 10 STEPS OVER 1000S
+t=1500s
+Notes:
+Instability triggered by singularity of pointing x towards z
+Unstable even earlier than a as damping less
+Follows jagged sawtooth-esque pattern and doesn't fully settle due to osc

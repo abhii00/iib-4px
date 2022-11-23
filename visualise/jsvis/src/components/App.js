@@ -14,7 +14,7 @@ class App extends React.Component{
     var camera; 
     var renderer;
 
-    [scene, camera, renderer] = setupScene(new THREE.Vector3(-2, -2, -2));
+    [scene, camera, renderer] = setupScene(new THREE.Vector3(10, 10, 0));
     this.mount.appendChild(renderer.domElement);
     animationrw(scene, camera, renderer);
 

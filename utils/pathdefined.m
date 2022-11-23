@@ -36,7 +36,7 @@ function pathdefined(ts, path, p, offset)
     visualiseenv(offset)
     
     %data
-    plot3(rs(:, 1), rs(:, 2), rs(:, 3), 'b')
+    plot3(rs(:, 1), rs(:, 2), rs(:, 3), 'b', 'LineWidth', 2)
     
     %add legend
     legend('Location', 'northeast');

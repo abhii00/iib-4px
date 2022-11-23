@@ -39,11 +39,11 @@ function pathshortest(qm_1, qm_2, N, p, offset)
     visualiseenv(offset)
     
     %initial and end
-    scatter3(r1(1), r1(2), r1(3), 'bo', 'DisplayName', 'Initial State');
-    scatter3(r2(1), r2(2), r2(3), 'bx', 'DisplayName', 'Final State');
+    scatter3(r1(1), r1(2), r1(3), 'bo', 'LineWidth', 1.5, 'DisplayName', 'Initial State');
+    scatter3(r2(1), r2(2), r2(3), 'bx', 'LineWidth', 1.5, 'DisplayName', 'Final State');
     
     %interpolated data
-    scatter3(rs(:, 1), rs(:, 2), rs(:, 3), 'filled', 'bo', 'DisplayName', 'Interpolated States');
+    scatter3(rs(:, 1), rs(:, 2), rs(:, 3), 'filled', 'bo', 'LineWidth', 1.5, 'DisplayName', 'Interpolated States');
     
     %add legend
     legend('Location','northeast');

@@ -7,17 +7,31 @@ function q_tar = refpath(t, a)
 %
 %Returns:
 %   q_tar (4x1 array): the target quaternion
-    if (a == 0)
-        ax = [1, 1, 0];
-        rot = pi/8 * (t > 100);
-        qm_tar = quatconstruct(rot*ax, 'rotation', 'matlab');
-    end
-
-    if (a == 1)
-        N = 10;
-        qm_1 = quatconstruct([0, 0, 0], 'rotation', 'matlab');
-        qm_2 = quatconstruct([0, 0, pi/2], 'rotation', 'matlab');
-        qms = slerp(qm_1, qm_2, linspace(0, 1, N+1));
-        qm_tar = qms(floor(t * N/1000) + 1);
+    
+    switch(a)
+        case 1
+            %0 -> PI/2 AROUND XZ WITH 10 STEPS
+            N = 10;
+            qm_1 = quatconstruct([0, 0, 0], 'rotation', 'matlab');
+            qm_2 = quatconstruct([pi/2, 0, pi/2], 'rotation', 'matlab');
+            qms = slerp(qm_1, qm_2, linspace(0, 1, N));
+            i = floor(t * N/1000) + 1;
+            if i <= N
+                qm_tar = qms(i);
+            else
+                qm_tar = qms(N);
+            end
+        case 2
+            %0 -> PI/4 AROUND YZ WITH 10 STEPS
+            N = 10;
+            qm_1 = quatconstruct([0, 0, 0], 'rotation', 'matlab');
+            qm_2 = quatconstruct([0, pi/4, pi/4], 'rotation', 'matlab');
+            qms = slerp(qm_1, qm_2, linspace(0, 1, N));
+            i = floor(t * N/1000) + 1;
+            if i <= N
+                qm_tar = qms(i);
+            else
+                qm_tar = qms(N);
+            end
     end
     q_tar = quatconvert(qm_tar, 'matlab', 'simulink');

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Vector3 } from "three";
 
 /**
  * AnimationRW: The animation to display the reaction wheels
@@ -8,6 +9,7 @@ import * as THREE from "three";
  */
  function animationrw(scene, camera, renderer){
     // parameters
+    const p = new Vector3(1, 0, 0);
     const b = 3; // body size
     const sf = 1.2; // scale factor
     const beta = Math.PI * 45/180;
@@ -29,11 +31,22 @@ import * as THREE from "three";
     // spacecraft
     const sc_geometry = new THREE.BoxGeometry(b, b, b);
     const sc_wire_geometry = new THREE.EdgesGeometry(sc_geometry);
-    const sc_material = new THREE.MeshStandardMaterial({color: 0xaaaaaa, transparent: true, opacity: 0.3});
+    const sc_material = new THREE.MeshStandardMaterial({color: 0xaaaaaa});
     const sc = new THREE.Mesh(sc_geometry, sc_material);
     sc.renderOrder = 1;
     const sc_wireframe = new THREE.LineSegments(sc_wire_geometry, line_material);
     sc_wireframe.scale.set(1.001, 1.001, 1.001);  
+    const actual_p = new THREE.ArrowHelper(p, new THREE.Vector3(0, 0, 0), sf*b, 0xff0000);
+
+    // target
+    const tsc_geometry = new THREE.BoxGeometry(b, b, b);
+    const tsc_wire_geometry = new THREE.EdgesGeometry(sc_geometry);
+    const tsc_material = new THREE.MeshStandardMaterial({color: 0xaaaaaa, transparent: true, opacity: 0.3});
+    const tsc = new THREE.Mesh(tsc_geometry, tsc_material);
+    const tsc_wireframe = new THREE.LineSegments(tsc_wire_geometry, line_material);
+    const target_p = new THREE.ArrowHelper(p, new THREE.Vector3(0, 0, 0), sf*b, 0x00ff00); 
+    tsc.scale.set(sf, sf, sf);
+    tsc_wireframe.scale.set(sf, sf, sf);
 
     // dish
     const dish_geometry = new THREE.SphereGeometry(b, 16, 4, 0, 2*Math.PI, 0, 3*Math.PI/12);
@@ -156,18 +169,26 @@ import * as THREE from "three";
 
     // add to scene
     scene.add(light);
-    scene.add(axes_x);
-    scene.add(axes_y);
-    scene.add(axes_z);
+    //scene.add(axes_x);
+    //scene.add(axes_y);
+    //scene.add(axes_z);
 
     scene.add(sc);
     scene.add(sc_wireframe);
+    scene.add(actual_p);
+
+    scene.add(tsc);
+    scene.add(tsc_wireframe);
+    scene.add(target_p);
+
+    tsc.rotateOnWorldAxis(z, Math.PI/6);
+    tsc_wireframe.rotateOnWorldAxis(z, Math.PI/6);
+    target_p.rotateOnWorldAxis(z, Math.PI/6);
 
     /*
     scene.add(dish);
     scene.add(dish_wireframe);
     scene.add(dish_ax);
-    */
 
     scene.add(sp1a);
     scene.add(sp1b);
@@ -193,6 +214,7 @@ import * as THREE from "three";
     scene.add(rw2_ax);
     scene.add(rw3_ax);
     scene.add(rw4_ax);
+    */
 
     /**
      * animator

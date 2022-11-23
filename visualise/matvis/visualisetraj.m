@@ -39,14 +39,14 @@ function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
     visualiseenv(offset)
     
     %initial actual and setup for animation
-    s = animatedline(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'Color', 'r', 'DisplayName', 'Actual');
-    sp = scatter3(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'filled', 'ro', 'DisplayName', 'Current Actual');
-    scatter3(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'ro', 'DisplayName', 'Initial State');
+    s = animatedline(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'Color', 'r', 'LineWidth', 1.5, 'DisplayName', 'Actual');
+    sp = scatter3(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'filled', 'ro', 'LineWidth', 1.5, 'DisplayName', 'Current Actual');
+    scatter3(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'ro', 'LineWidth', 1.5, 'DisplayName', 'Initial State');
     
     %initial target and setup for animation
-    t = animatedline(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'Color', 'g', 'DisplayName', 'Target');
-    tp = scatter3(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'filled', 'go', 'DisplayName', 'Current Target');
-    scatter3(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'go', 'DisplayName', 'Initial Target');
+    t = animatedline(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'Color', 'g', 'LineWidth', 1.5, 'DisplayName', 'Target');
+    tp = scatter3(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'filled', 'go', 'LineWidth', 1.5, 'DisplayName', 'Current Target');
+    scatter3(rs_tar(1, 1), rs_tar(1, 2), rs_tar(1, 3), 'go', 'LineWidth', 1.5, 'DisplayName', 'Initial Target');
     
     %add legend
     legend('Location','northeast');
@@ -79,8 +79,8 @@ function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
     %final actual and target and delete animation
     delete(sp);
     delete(tp);
-    scatter3(rs_acc(end, 1), rs_acc(end, 2), rs_acc(end, 3), 'rx', 'DisplayName', 'Final Actual');
-    scatter3(rs_tar(end, 1), rs_tar(end, 2), rs_tar(end, 3), 'gx', 'DisplayName', 'Final Target');
+    scatter3(rs_acc(end, 1), rs_acc(end, 2), rs_acc(end, 3), 'rx', 'LineWidth', 1.5, 'DisplayName', 'Final Actual');
+    scatter3(rs_tar(end, 1), rs_tar(end, 2), rs_tar(end, 3), 'gx', 'LineWidth', 1.5, 'DisplayName', 'Final Target');
     
     %readd legend
     legend('Location','northeast');
