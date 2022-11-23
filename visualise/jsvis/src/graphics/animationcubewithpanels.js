@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import Papa from "papaparse";
 
-import qcsv from '../sim_main.csv'
-import tcsv from '../sim_aux.csv'
+import qcsv from '../main1.csv'
+import tcsv from '../aux1.csv'
 
 /**
  * AnimationCubeWithPanels: The animation for the simple cube with panels

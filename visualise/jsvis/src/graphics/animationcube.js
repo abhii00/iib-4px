@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Papa from "papaparse";
 
-import qcsv from '../sim_main.csv'
+import qcsv from '../main.csv'
 
 /**
  * AnimationCube: The animation for the simple cube
