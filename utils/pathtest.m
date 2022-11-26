@@ -7,6 +7,6 @@ function qm = pathtest(t)
 %Returns:
 %   qm evaluated at the value t
 
-    theta = 2*t;
-    phi = 2*t;
+    theta = t;
+    phi = t;
     qm = quatconstruct([1, theta, phi], 'spherical', 'matlab');

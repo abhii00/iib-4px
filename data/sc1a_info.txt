@@ -1,5 +1,5 @@
 23/11/22
-SCMODELCUBEWITHPANELS
+SCMODELCUBE
 p=[1 0 0, 0 1 0, 0 0 1]
 k=[1, 1, 1]
 lambda=[50, 50, 50] 
