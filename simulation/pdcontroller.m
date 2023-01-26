@@ -1,10 +1,10 @@
-function tau_tot = simpcontlaw(q_tar, q_acc, qd_acc, ks, lambdas, ps)
+function tau_tot = pdcontroller(q_tar, q_acc, dq_acc, ks, lambdas, ps)
 %function to implement simple control law
 %
 %Arguments:
 %   q_tar (4x1 array): target quaternion
 %   q_acc (4x1 array): actual quaternion
-%   qd_acc (4x1 array): actual quaternion derivative
+%   dq_acc (4x1 array): actual quaternion derivative
 %   ks (1xn array): the proportional gain for each pointing direction
 %   lambdas (1xn array): the derivative gain for each pointing direction
 %   ps (3xn array): the pointing directions
@@ -15,7 +15,7 @@ function tau_tot = simpcontlaw(q_tar, q_acc, qd_acc, ks, lambdas, ps)
     %convert from q to qm
     qm_acc = quatconvert(q_acc, 'simulink', 'matlab');
     qm_tar = quatconvert(q_tar, 'simulink', 'matlab');
-    qmd_acc = quatconvert(qd_acc, 'simulink', 'matlab');
+    dqm_acc = quatconvert(dq_acc, 'simulink', 'matlab');
     
     %iterate over all pointing directions
     mn = size(ps);
@@ -26,14 +26,15 @@ function tau_tot = simpcontlaw(q_tar, q_acc, qd_acc, ks, lambdas, ps)
         p_acc = rotatepoint(qm_acc, p);
         p_tar = rotatepoint(qm_tar, p);
 
-        %find w_acc
-        qwm_acc = 2*qmd_acc*conj(qm_acc);
-        qw_acc = quatconvert(qwm_acc, 'matlab', 'simulink');
-        w_acc = qw_acc(2:4);
-        pd_acc = cross(w_acc, p_acc); 
+        %construct qp from p, find dqpm, convert to dp
+        qp_acc = [0; p_acc.'];
+        qpm_acc = quatconvert(qp_acc, 'simulink', 'matlab');
+        dqpm_acc = dqm_acc*conj(qm_acc)*qpm_acc - qpm_acc*dqm_acc*conj(qm_acc);
+        dqp_acc = quatconvert(dqpm_acc, 'matlab', 'simulink');
+        dp_acc = dqp_acc(2:4).';
                 
         %find torque for that direction
-        taus(j, :) = cross(p_acc, ks(j) * (p_tar - p_acc) - lambdas(j) * pd_acc);
+        taus(j, :) = cross(p_acc, ks(j) * (p_tar - p_acc) - lambdas(j) * dp_acc);
     end
 
     %find torque
