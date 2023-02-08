@@ -14,7 +14,7 @@ function [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar] = prepmaindata(out, fn)
     ddqs_acc = getdatasamples(out.ddq_acc, 1:length(ts));
     qs_tar = getdatasamples(out.q_tar, 1:length(ts));
 
-    save(['./data/', fn, '_main.mat'], 'ts', 'qs_acc', 'dqs_acc', 'ddqs_acc', 'qs_tar');
+    save(['./results/', fn, '_main.mat'], 'ts', 'qs_acc', 'dqs_acc', 'ddqs_acc', 'qs_tar');
 
     csvo = [ts, permute(qs_acc, [3, 1, 2]), permute(dqs_acc, [3, 1, 2]), permute(ddqs_acc, [3, 1, 2]), permute(qs_tar, [3, 1, 2])];
-    writematrix(csvo, ['./data/', fn, '_main.csv'])
+    writematrix(csvo, ['./results/', fn, '_main.csv'])
