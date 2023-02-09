@@ -1,5 +1,5 @@
 function tau_tot = pdcontroller(q_tar, q_acc, dq_acc, ks, lambdas, ps)
-%function to implement simple control law
+%function to implement simple PD control law
 %
 %Arguments:
 %   q_tar (4x1 array): target quaternion

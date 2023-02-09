@@ -1,4 +1,5 @@
 %file to prepare output, after simulation run
+fn = input('File Name:', 's');
 [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar] = prepmaindata(out, fn);
 if exist('aux','var') == 1
     if aux

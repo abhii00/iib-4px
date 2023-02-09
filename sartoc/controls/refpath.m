@@ -21,5 +21,7 @@ function q_tar = refpath(t, a)
             else
                 qm_tar = qms(N);
             end
+        case 2
+            qm_tar = quatconstruct(2*pi*t/1000*[0, 1, 1], 'rotation', 'matlab');
     end
     q_tar = quatconvert(qm_tar, 'matlab', 'simulink');

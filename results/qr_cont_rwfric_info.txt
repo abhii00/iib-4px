@@ -1,0 +1,1 @@
+QR:RW FRICTION:cont:yz:2*pi*t/1000

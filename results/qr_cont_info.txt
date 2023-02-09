@@ -1,0 +1,1 @@
+QR:cont:yz:2*pi*t/1000
