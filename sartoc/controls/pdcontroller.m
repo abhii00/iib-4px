@@ -35,6 +35,7 @@ function tau_tot = pdcontroller(q_tar, q_acc, dq_acc, ks, lambdas, ps)
                 
         %find torque for that direction
         taus(j, :) = cross(p_acc, ks(j) * (p_tar - p_acc) - lambdas(j) * dp_acc);
+        %taus(j, :) = cross(p_acc, ks(j) * (p_tar - p_acc));
     end
 
     %find torque

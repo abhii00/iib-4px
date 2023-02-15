@@ -18,7 +18,7 @@ function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
         ts
         p = [1, 0, 0]
         offset = 1.05
-        speed = 10
+        speed = 1
     end
     
     %CALCULATE
