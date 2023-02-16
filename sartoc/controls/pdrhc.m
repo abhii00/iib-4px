@@ -5,8 +5,8 @@ t_seq = [0];
 k_seq = [1];
 lambda_seq = [1];
 
-dk = 0.1;
-dlambda = 0.1;
+dk = 0.05;
+dlambda = 0.05;
 
 %update every control step
 for t = 0:chor:20
@@ -20,7 +20,7 @@ for t = 0:chor:20
 
     disp(t)
     %optimise k, lambda over horizon
-    for i = 1:10
+    for i = 1:150
         %try 4 variations
         costs = zeros(2, 2);
         ks_trial = [k_guess + dk, k_guess, k_guess - dk];
