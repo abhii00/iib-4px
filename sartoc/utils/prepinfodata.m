@@ -11,3 +11,4 @@ function prepinfodata(fn)
     info = input('Information for this test case: ', "s");
     fprintf(fid, '%s', info);
     fclose(fid);
+end

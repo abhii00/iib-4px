@@ -1,5 +1,6 @@
 slprj/
 *.slxc
+*.asv
 
 #visualiser
 node_modules/

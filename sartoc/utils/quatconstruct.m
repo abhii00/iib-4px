@@ -39,3 +39,4 @@ function q = quatconstruct(vec, iptype, optype, p)
             qm = quaternion(vec, 'rotvec');
     end
     q = quatconvert(qm, 'matlab', optype);
+end

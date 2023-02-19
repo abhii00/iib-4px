@@ -50,3 +50,4 @@ function Q_o = quatconvert(Q_i, iptype, optype)
         case 'aerospace'
             Q_o = compact(Qm);
     end
+end

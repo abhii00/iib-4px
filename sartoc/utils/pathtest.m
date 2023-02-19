@@ -10,3 +10,4 @@ function qm = pathtest(t)
     theta = t;
     phi = t;
     qm = quatconstruct([1, theta, phi], 'spherical', 'matlab');
+end

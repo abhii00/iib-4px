@@ -36,5 +36,6 @@ function visualiseconv(qs_acc, qs_tar, ts, p)
     %PLOT
     plot(ts, thetas, 'Color', [1, 0, 1]);
     xlabel('t (s)');
-    ylabel('\delta\theta')
-    title(['Convergence Plot, ITAE = ', num2str(evaluateperfITAE(ts, thetas))])
+    ylabel('\delta\theta');
+    title(['Convergence Plot, ITAE = ', num2str(evaluateperfITAE(ts, thetas))]);
+end

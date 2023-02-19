@@ -18,3 +18,4 @@ function visualiseenv(offset)
     quiver3(0, 0, 0, 1.1*offset, 0, 0, 0, 'y', 'LineWidth', 1, 'DisplayName', 'x');
     quiver3(0, 0, 0, 0, 1.1*offset, 0, 0, 'm', 'LineWidth', 1, 'DisplayName', 'y');
     quiver3(0, 0, 0, 0, 0, 1.1*offset, 0, 'c', 'LineWidth', 1, 'DisplayName', 'z');
+end

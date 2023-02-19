@@ -36,7 +36,7 @@ function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
     end
     
     %PLOT
-    visualiseenv(offset)
+    visualiseenv(offset);
     
     %initial actual and setup for animation
     s = animatedline(rs_acc(1, 1), rs_acc(1, 2), rs_acc(1, 3), 'Color', 'r', 'LineWidth', 1.5, 'DisplayName', 'Actual');
@@ -84,3 +84,4 @@ function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
     
     %readd legend
     legend('Location','northeast');
+end

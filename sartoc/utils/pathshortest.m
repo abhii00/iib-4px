@@ -47,3 +47,4 @@ function pathshortest(qm_1, qm_2, N, p, offset)
     
     %add legend
     legend('Location','northeast');
+end

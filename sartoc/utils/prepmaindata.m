@@ -17,4 +17,5 @@ function [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar] = prepmaindata(out, fn)
     save(['./results/', fn, '_main.mat'], 'ts', 'qs_acc', 'dqs_acc', 'ddqs_acc', 'qs_tar');
 
     csvo = [ts, permute(qs_acc, [3, 1, 2]), permute(dqs_acc, [3, 1, 2]), permute(ddqs_acc, [3, 1, 2]), permute(qs_tar, [3, 1, 2])];
-    writematrix(csvo, ['./results/', fn, '_main.csv'])
+    writematrix(csvo, ['./results/', fn, '_main.csv']);
+end

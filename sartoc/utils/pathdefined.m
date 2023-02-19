@@ -40,3 +40,4 @@ function pathdefined(ts, path, p, offset)
     
     %add legend
     legend('Location', 'northeast');
+end
