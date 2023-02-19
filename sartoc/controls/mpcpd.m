@@ -1,16 +1,16 @@
-function g = pen_mpcpd(t)
+function g = mpcpd(t)
     persistent t_seq g_seq
 
     %simulation parameters
-    model_name = 'pen_mpcpdmodel';
+    model_name = 'cube0_mpcpdmodel_ref_ls';
     
     %horizons
     pred_horizon = 5;
     cont_horizon = 2;
     
     %learning parameters
-    g_next_0 = [1; 1];
-    dg = [0.05; 0.05];
+    g_next_0 = [1; 1; 1; 1; 1; 1];
+    dg = [0.05; 0.05; 0.05; 0.05; 0.05; 0.05];
     iterations = 100;
     eta = 0.05;
     
@@ -83,12 +83,12 @@ function g = pen_mpcpd(t)
 
     function out = simulate(mdl_name, t, pred_horizon, g_seq, t_seq)
         %construct individual time series for k, lambda
-        k_series = timeseries(g_seq(1, :), t_seq);
-        lambda_series = timeseries(g_seq(2, :), t_seq);
+        ks_series = timeseries(g_seq(1:3, :), t_seq);
+        lambdas_series = timeseries(g_seq(4:6, :), t_seq);
         
         %add time series to base workspace for access by simulink
-        assignin('base','k_series', k_series);
-        assignin('base','lambda_series', lambda_series);
+        assignin('base','ks_series', ks_series);
+        assignin('base','lambdas_series', lambdas_series);
         
         %simulate
         out = sim(mdl_name, t+pred_horizon);
@@ -97,14 +97,22 @@ function g = pen_mpcpd(t)
     function C = evaluateC(out)
         %get output data and trim to only after current time
         ts = out.tout;
-        es = getdatasamples(out.es, 1:length(ts));
-        ys = getdatasamples(out.ys, 1:length(ts));
+        qs_acc = getdatasamples(out.q_acc, 1:length(ts));
+        qs_tar = getdatasamples(out.q_tar, 1:length(ts));
+        qs_acc = qs_acc(ts > t);
+        qs_tar = qs_tar(ts > t);
         ts = ts(ts > t);
-        es = es(ts > t);
-        ys = ys(ts > t);
-        
+
+        es = zeros(size(ts));
+
+        for j = 1:length(ts)
+            qm_acc = quatconvert(qs_acc(j), 'simulink', 'matlab');
+            qm_tar = quatconvert(qs_tar(j), 'simulink', 'matlab');
+            es = dist(qm_tar, qm_acc);
+        end
+
         %calculate cost
-        cost = cumtrapz(ts, es.^2 + ys.^2);
+        cost = cumtrapz(ts, es.^2);
         C = cost(end);
     end
 end 

@@ -36,7 +36,7 @@ function pathshortest(qm_1, qm_2, N, p, offset)
     r2 = offset * rotatepoint(qm_2, p);
 
     %PLOT
-    visualiseenv(offset)
+    visualiseenv(offset);
     
     %initial and end
     scatter3(r1(1), r1(2), r1(3), 'bo', 'LineWidth', 1.5, 'DisplayName', 'Initial State');

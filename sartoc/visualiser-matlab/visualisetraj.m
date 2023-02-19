@@ -56,7 +56,7 @@ function visualisetraj(qs_acc, qs_tar, ts, p, offset, speed)
     
     %animate
     for k = 2:length(ts)
-        if mod(k, speed) == 0
+        if (mod(k, speed) == 0)
             %update actual
             addpoints(s, rs_acc(k, 1), rs_acc(k, 2), rs_acc(k, 3));
             sp.XData = rs_acc(k, 1);
