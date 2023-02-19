@@ -40,3 +40,4 @@ function tau_tot = pdcontroller(q_tar, q_acc, dq_acc, ks, lambdas, ps)
 
     %find torque
     tau_tot = -1*sum(taus);
+end
