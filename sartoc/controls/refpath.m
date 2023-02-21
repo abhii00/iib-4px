@@ -13,7 +13,7 @@ function q_tar = refpath(t, a)
             %0 -> PI/4 AROUND YZ WITH 10 STEPS
             N = 10;
             qm_1 = quatconstruct([0, 0, 0], 'rotation', 'matlab');
-            qm_2 = quatconstruct([0, pi/4, pi/4], 'rotation', 'matlab');
+            qm_2 = quatconstruct(pi/4*[0, 1, 1]/norm([0, 1, 1]), 'rotation', 'matlab');
             qms = slerp(qm_1, qm_2, linspace(0, 1, N));
             i = floor(t * N/1000) + 1;
             if i <= N
@@ -21,8 +21,11 @@ function q_tar = refpath(t, a)
             else
                 qm_tar = qms(N);
             end
+        case 3
+            tm = t - 450;
+            qm_tar = quatconstruct(2*pi*tm/1000*[0, 1, 1]/norm([0, 1, 1]), 'rotation', 'matlab');
         case 1
-            qm_tar = quatconstruct(2*pi*t/1000*[0, 1, 1], 'rotation', 'matlab');
+            qm_tar = quatconstruct(pi/2*[0, 1, 1]/norm([0, 1, 1]), 'rotation', 'matlab');
     end
     q_tar = quatconvert(qm_tar, 'matlab', 'simulink');
 end
