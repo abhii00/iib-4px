@@ -5,13 +5,13 @@ function g = mpcpd(t)
     model_name = 'cube0_mpcpdmodel_ref_ls';
     
     %horizons
-    pred_horizon = 5;
-    cont_horizon = 2;
+    pred_horizon = 10;
+    cont_horizon = 5;
     
     %learning parameters
     g_next_0 = [1; 1; 1; 1; 1; 1];
     dg = [0.05; 0.05; 0.05; 0.05; 0.05; 0.05];
-    iterations = 100;
+    iterations = 10;
     eta = 0.05;
     
     %setup empty time and control sequences
