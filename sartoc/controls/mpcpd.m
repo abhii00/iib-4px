@@ -1,28 +1,35 @@
 function g = mpcpd(t)
-    persistent t_seq g_seq m
+    persistent t_seq g_seq update_no
 
     %simulation parameters
     model_name = 'cube0_mpcpdmodel';
     
     %horizons
-    pred_horizon = 20;
-    cont_horizon = 5;
+    pred_horizon = 15;
+    cont_horizon = 10;
     
     %learning parameters
     g_next_0 = [1; 1; 1; 50; 50; 50];
     dg = 0.05*ones(6, 1);
     iterations = 100;
-    eta = 0.1;
+    eta = 0.05;
     
     %setup empty time and control sequences
-    if (t == 0)
+    update_req = false;
+    if (isempty(t_seq))
         t_seq = [];
         g_seq = [];
-        m = 0;
+        update_no = 0;
+        update_req = true;
+        disp('============')
+        disp('Starting MPC')
+        disp('============')
+    elseif (t - t_seq(end) >= cont_horizon)
+        update_req = true;
     end
-   
+
     %update if needed
-    if ((t == 0) || (t - t_seq(end) >= cont_horizon))
+    if (update_req)
         disp('==================================')
         disp(['Updating for t = ' num2str(t) 's'])
 
@@ -48,11 +55,13 @@ function g = mpcpd(t)
             %extend dg into matrix, and set up dg
             dgs = diag(dg);
             Cs = zeros(6, 1);
+            gradC = ones(6, 1);
 
             %C(k, lambda)
             test_g_seq(:, end) = g_next;
             output = simulate(model_name, t, pred_horizon, test_g_seq, t_seq);
             C0 = evaluateC(output, g_next);
+            disp('Evaluated C(0)')
             C0s = [C0s C0];
     
             for n=1:length(dg)
@@ -60,6 +69,7 @@ function g = mpcpd(t)
                 test_g_seq(:, end) = g_next + dgs(:, n);
                 output = simulate(model_name, t, pred_horizon, test_g_seq, t_seq);
                 Cs(n) = evaluateC(output, g_next + dgs(:, n));
+                disp(['Evaluated C(' num2str(n) ')'])
                 if Cs(n) < 0
                     Cs(n) = 0;
                 end
@@ -75,20 +85,21 @@ function g = mpcpd(t)
             i = i + 1;
             if (all(gradC == 0) || (i > iterations))
                 gradient_descent = false;
+                disp('----------------------------------')
+                disp(['Gradient Descent Finished at iteration #' num2str(i)])
             end
         end
 
+        %end gradient descent
+        disp(['Time Taken = ' num2str(toc(t_start)) 's'])
+        hold on
+        plot(C0s);
+
         %extend actual control sequence
         g_seq(:, end+1) = g_next;
-        disp('----------------------------------')
+        update_no = update_no + 1;
         disp(['Final Control Gains = ' num2str(g_seq(:, end).') ' for t = ' num2str(t) 's'])
     end
-    
-    %end gradient descent
-    t_elapse = toc(t_start);
-    disp(['Time Taken: ' num2str(t_elapse)])
-    m = m + 1;
-    writematrix(Cs, ['./results/Cs_' num2str(m) '.csv']);
 
     %assign control
     g = g_seq(:, end);
