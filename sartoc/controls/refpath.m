@@ -8,7 +8,7 @@ function q_tar = refpath(t, a)
 %Returns:
 %   q_tar (4x1 array): the target quaternion
     
-    a = 2;
+    a = 3;
 
     switch(a)
         case 1

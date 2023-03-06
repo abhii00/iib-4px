@@ -19,8 +19,8 @@ function tau = taudecomp(tau_tot, D, q_acc)
     b = tau_tot.';
     
     %solve for x
-    x = A\b;
+    x = pinv(A)*b;
     
     %recast to original
-    tau = x.';
+    tau = x;
 end
