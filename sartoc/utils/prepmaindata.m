@@ -6,7 +6,8 @@ function [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar] = prepmaindata(out, fn)
 %   fn (str): the file name to save to
 %
 %Returns:
-%   [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar]: the time, actual state and target state arrays
+%   [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar: the time, actual
+%   state and target state arrays
 
     ts = out.tout;
     qs_acc = getdatasamples(out.q_acc, 1:length(ts));

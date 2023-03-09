@@ -1,0 +1,1 @@
+step of pi/2 around yz, 10 iterations with 2 learning rate, for cube0, decreased damping and post-capped gains

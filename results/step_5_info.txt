@@ -1,0 +1,1 @@
+step of pi/2 around yz, 50 iterations with 0.5 learning rate but infinite horizon
