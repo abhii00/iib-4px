@@ -1,4 +1,4 @@
-function [ts, thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b] = prepauxdata(out, fn)
+function [ts, thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b] = prepaux(out, fn)
 %loads simulation data into workspace and saves
 %
 %Arguments:
@@ -15,8 +15,8 @@ function [ts, thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b] = prepauxdata(
     thetas_sp2a = getdatasamples(out.theta_sp2a, 1:length(ts));
     thetas_sp2b = getdatasamples(out.theta_sp2b, 1:length(ts));
 
-    save(['./results/', fn, '_aux.mat'], 'ts', 'thetas_sp1a', 'thetas_sp1b', 'thetas_sp2a', 'thetas_sp2b');
+    save([fn, '_aux.mat'], 'ts', 'thetas_sp1a', 'thetas_sp1b', 'thetas_sp2a', 'thetas_sp2b');
 
     csvo = [ts, permute(thetas_sp1a, [3, 1, 2]), permute(thetas_sp1b, [3, 1, 2]), permute(thetas_sp2a, [3, 1, 2]), permute(thetas_sp2b, [3, 1, 2])];
-    writematrix(csvo, ['./results/', fn, '_aux.csv']);
+    writematrix(csvo, [fn, '_aux.csv']);
 end

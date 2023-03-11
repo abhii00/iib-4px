@@ -1,4 +1,4 @@
-function prepinfodata(fn)
+function prepinfo(fn)
 %creates the info file
 %
 %Arguments:
@@ -7,7 +7,7 @@ function prepinfodata(fn)
 %Returns:
 %   None
 
-    fid = fopen(['./results/', fn, '_info.txt'], 'wt');
+    fid = fopen([fn, '_info.txt'], 'wt');
     info = input('Information for this test case: ', "s");
     fprintf(fid, '%s', info);
     fclose(fid);

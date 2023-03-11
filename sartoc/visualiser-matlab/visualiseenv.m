@@ -8,6 +8,7 @@ function visualiseenv(offset)
 %   None
 
     %sphere
+    figure;
     [xsphere, ysphere, zsphere] = sphere;
     s = surf(xsphere, ysphere, zsphere, 'DisplayName', 'Attitude Sphere');
     colormap(copper);
