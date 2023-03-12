@@ -1,16 +1,14 @@
-function q_tar = refpath(t, a)
+function q_tar = refpath(t, tar)
 %function to provide a reference path i.e. q_tar(t)
 %
 %Arguments:
 %   t (float): parameter, usually time, to select point in path
-%   a (int): parameter to select which path
+%   tar (int): parameter to select which target
 %
 %Returns:
 %   q_tar (4x1 array): the target quaternion
     
-    a = 3;
-
-    switch(a)
+    switch(tar)
         case 1
             %0 -> PI/4 AROUND YZ WITH 10 STEPS
             N = 10;
@@ -30,6 +28,9 @@ function q_tar = refpath(t, a)
         case 3
             %0 -> PI/2 AROUND YZ WITH 1 STEP
             qm_tar = quatconstruct(pi/2*[0, 1, 1]/norm([0, 1, 1]), 'rotation', 'matlab');
+        otherwise
+            %NO ROTATION
+            qm_tar = quaternion(1, 0, 0, 0);
     end
     q_tar = quatconvert(qm_tar, 'matlab', 'simulink');
 end

@@ -14,11 +14,8 @@ if exist('aux','var') == 1
     end
 end
 
-%setup p
-p = [1, 0, 0];
-
 %visualise error
-visualiseerr(qs_acc, qs_tar, ts, fn, p);
+visualiseperf(qs_acc, qs_tar, ts, costfunction, rt_taken, fn);
 
 %visualise control
 visualisecont(ws_rw, taus, ts, ks, lambdas, tgs, fn);
@@ -31,4 +28,5 @@ if exist('aux','var') == 1
 end
 
 %visualise trajectory
+p = [1, 0, 0];
 visualisetraj(qs_acc, qs_tar, ts, p);

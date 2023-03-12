@@ -9,9 +9,9 @@ function [tgs, ks, lambdas] = prepgain(out, fn)
 %   [tcs, ks, lambdas]: the control
 %   time and the gains
 
-    tgs = out.kss.Time;
-    ks = getdatasamples(out.kss, 1:length(tgs));
-    lambdas = getdatasamples(out.css, 1:length(tgs));
+    tgs = out.k.Time;
+    ks = getdatasamples(out.k, 1:length(tgs));
+    lambdas = getdatasamples(out.lambda, 1:length(tgs));
 
     save([fn, '_gain.mat'], 'tgs', 'ks', 'lambdas');
 

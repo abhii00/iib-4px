@@ -1,30 +1,35 @@
-clear
-
-%params
+%open models
 loop_real = 'cube0_mpcpd';
 loop_model = 'cube0_mpcpd_model';
 sc_real = 'cube0';
 sc_model = 'cube0_model';
-pred_horizon = 50;
-cont_update = 10;
 
-%open
 open(loop_real);
-set_param(loop_real,'FastRestart','on');
-set_param(loop_real, 'SaveState', 'on', 'StateSaveName', 'states')
+set_param(loop_real,'FastRestart', 'on',  'SaveState', 'on', 'StateSaveName', 'states');
 open(loop_model);
 set_param(loop_model,'FastRestart','on');
 
-%test
-sim(loop_real, 'StopTime', num2str(400));
-prepvis(out, 'test');
+%TEST 1a---------------
 
-function prepvis(out, filename)
-    mkdir(['./results/' filename '/']);
-    fn = ['./results/' filename '/' filename];
-    prepinfo(fn);
-    [ts, qs_acc, dqs_acc, ddqs_acc, qs_tar, ws_rw, taus] = prepmain(out, fn);
-    [tgs, ks, lambdas] = prepgain(out, fn);
-    visualiseerr(qs_acc, qs_tar, ts, fn, p);
-    visualisecont(ws_rw, taus, ts, ks, lambdas, tgs, fn);
+%params
+tar = 3;
+costfunction = 1;
+t_tot = 400;
+
+%mpcpd params
+pred_horizon = 50;
+cont_update = 10;
+g = [1; 1; 1; 50; 50; 50];
+iterations = 20;
+learning_rate = 0.1;
+
+%sim
+rt_start = tic;
+set_param(loop_real, 'SimulationCommand', 'start', 'StopTime', num2str(t_tot));
+while strcmp(get_param(loop_real, 'SimulationStatus'), 'running')
+    pause(1)
 end
+rt_taken = toc(rt_start);
+filename = '1_a';
+info = '50 10 [1 1 1 50 50 50] 20 0.1 (e^2 + 0.025k^2)';
+prepvisualise;
