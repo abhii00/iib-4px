@@ -24,8 +24,8 @@ function cost = predictcost(loop_model, states_cur, pred_horizon, costfunction, 
                    'LoadInitialState', 'on', 'InitialState', 'states_cur');
 
     %gather data
-    [ts, es] = prepforcost(out_pred);
+    [ts, es, ws_rw, thetas] = prepforcost(out_pred);
 
     %calculate cost
-    cost = evaluatecost(costfunction, ts, es) + 0.025*dot(g_test(1:3), g_test(1:3));
+    cost = evaluatecost(costfunction, ts, es, ws_rw, thetas) + 0.01*dot(g_test(1:3), g_test(1:3));
 end

@@ -1,9 +1,11 @@
-function visualiseperf(qs_acc, qs_tar, ts, costfunction, rt_taken, fn)
+function visualiseperf(qs_acc, qs_tar, ws_rw, thetas, ts, costfunction, rt_taken, fn)
 %visualises the error of the simulation over time
 %
 %Arguments:
 %   qs_acc (array): the quaternion array for the actual state
 %   qs_tar (array): the quaternion array for the target state
+%   ws_rw (array): the array of reaction wheel velocities
+%   thetas (array): the array of solar panel angles
 %   ts (array): the ts array
 %   costfunction (int): the cost function to use
 %   rt_taken (float): the real time taken for the simulation
@@ -29,6 +31,6 @@ function visualiseperf(qs_acc, qs_tar, ts, costfunction, rt_taken, fn)
     plot(ts, es, 'Color', [1, 0, 1]);
     xlabel('t (s)');
     ylabel('\delta\theta');
-    title(['Error, C = ' num2str(evaluatecost(costfunction, ts, es)) ', TTaken = ' num2str(rt_taken) 's']);
+    title(['Error, C = ' num2str(evaluatecost(costfunction, ts, es, ws_rw, thetas)) ', TTaken = ' num2str(rt_taken) 's']);
     saveas(gcf, [fn '_err.png']);
 end

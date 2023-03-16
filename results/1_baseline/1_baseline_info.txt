@@ -1,1 +1,0 @@
-1: Step of pi/2 around yz running for 400s. Baseline: [1 1 1] [50 50 50] e^2.

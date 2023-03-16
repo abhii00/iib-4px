@@ -66,10 +66,7 @@ function g = mpcpd(costfunction)
         disp(['Predicted gradC = ' num2str(gradC.')])
         
         %step down gradient
-        g = g - learning_rate*gradC;
-
-        %cap negative gain
-        g = max(g, 0);
+        g = g.*exp(-learning_rate*gradC);
 
         %check for completion
         i = i + 1;
