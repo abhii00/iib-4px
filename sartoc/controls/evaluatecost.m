@@ -23,7 +23,7 @@ function cost = evaluatecost(costfunction, ts, es, ws_rw, thetas)
             cost = cumcost(end);
         case 3
             %e^2 + Qthetas^2
-            Q = 500;
+            Q = 2.5e4;
             cumcost = cumtrapz(ts, es.^2 + Q*dot(thetas, thetas, 2));
             cost = cumcost(end);
         otherwise
