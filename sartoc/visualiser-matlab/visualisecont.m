@@ -4,7 +4,7 @@ function visualisecont(ws_rw, taus, ts, ks, lambdas, tgs, fn)
 %Arguments:
 %   ws_rw (array): the reaction wheel speeds
 %   taus (array): the distributed torques
-%   ts (array): the ts array for the 
+%   ts (array): the ts array for the ws_rw and taus
 %   ks (array): the proportional gains
 %   lambdas (array): the derivative gains
 %   tgs (array): the tcs array for the gains
