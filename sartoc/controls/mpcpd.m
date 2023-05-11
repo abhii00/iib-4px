@@ -50,7 +50,7 @@ function g = mpcpd(costfunction)
         end
     end
 
-    states_cur = removeElement(states_cur, states_to_remove)
+    states_cur = removeElement(states_cur, states_to_remove);
 
     %perform gradient descent
     disp('==================================')
