@@ -1,4 +1,5 @@
 function g = mpcpd(costfunction)
+    %INIT
     %mpc-pd parameters
     loop_real = evalin('base', 'loop_real');
     loop_model = evalin('base', 'loop_model');
@@ -11,15 +12,22 @@ function g = mpcpd(costfunction)
     iterations = evalin('base', 'iterations');
     learning_rate = evalin('base', 'learning_rate');
 
-    %extract states from current sim and state structure from model sim
+    %INITIAL STATE FOR PREDICTION
+    %extract states from current sim by forcing log write
     set_param(loop_real, 'SimulationCommand', 'WriteDataLogs');
     out_cur = evalin('base', 'out');
     states_cur = out_cur.states;
+    clearvars out_cur;
+    
+    %extract states from model by forcing log write
     assignin('base', 'k', g(1:3));
     assignin('base', 'lambda', g(4:6));
-    states_needed = Simulink.BlockDiagram.getInitialState(loop_model);
-    states_to_remove = [];
+    out_model = sim(loop_model, 'StopTime', num2str(1));
+    states_needed = out_model.states;
+    clearvars out_model;
 
+    states_to_remove = [];
+    
     %modify initial state labels
     for i = 1:numElements(states_cur)
         %replace name from sc_real -> sc_model
@@ -56,7 +64,9 @@ function g = mpcpd(costfunction)
     end
 
     states_cur = removeElement(states_cur, states_to_remove);
+    clearvars states_to_remove;
 
+    %OPTIMISE
     %perform gradient descent
     disp('==================================')
     rt_start = tic;
