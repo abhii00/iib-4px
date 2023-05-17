@@ -11,16 +11,16 @@ function q_tar = refpath(t, tar)
     switch(tar)
         case 1
             %0 -> PI/4 AROUND YZ WITH 10 STEPS
-            N = 10;
-            qm_1 = quatconstruct([0, 0, 0], 'rotation', 'matlab');
-            qm_2 = quatconstruct(pi/4*[0, 1, 1]/norm([0, 1, 1]), 'rotation', 'matlab');
-            qms = slerp(qm_1, qm_2, linspace(0, 1, N));
-            i = floor(t * N/1000) + 1;
-            if i <= N
-                qm_tar = qms(i);
-            else
-                qm_tar = qms(N);
-            end
+%             N = 10;
+%             qm_1 = quatconstruct([0, 0, 0], 'rotation', 'matlab');
+%             qm_2 = quatconstruct(pi/4*[0, 1, 1]/norm([0, 1, 1]), 'rotation', 'matlab');
+%             qms = slerp(qm_1, qm_2, linspace(0, 1, N));
+%             i = floor(t * N/1000) + 1;
+%             if i <= N
+%                 qm_tar = qms(i);
+%             else
+%                 qm_tar = qms(N);
+%             end
         case 2
             %2PI AROUND YZ IN 1000 WITH DELAY -450
             tm = t - 450;

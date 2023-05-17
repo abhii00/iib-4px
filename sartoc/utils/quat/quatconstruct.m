@@ -1,4 +1,4 @@
-function q = quatconstruct(vec, iptype, optype, p)
+function q = quatconstruct(vec, iptype, optype)
 %creates a quaternion from a standard direction or rotation vector
 %
 %Arguments:
@@ -8,8 +8,6 @@ function q = quatconstruct(vec, iptype, optype, p)
 %   'spherical', 'rotation' 
 %   optype (string): the output type of the quaternion from 'matlab', 
 %   'simulink' or 'aerospace'
-%   p (3x1 vector): the vector to be pointed in direction, required if 
-%   direction vector specified, defaults to [1, 0, 0]
 %   
 %Returns:
 %   quaternion if optype is 'matlab', 4x1 array if optype is 'simulink' or
@@ -18,13 +16,10 @@ function q = quatconstruct(vec, iptype, optype, p)
 %Definitions:
 %   v_aa, 1x4 array - axis angle with 1-3 as axis, 4 as angle
 %   v_a, 1x3 array - axis angle with 1-3 as axis*angle
+%   p (3x1 vector): the vector to be pointed in direction, required if 
+%   direction vector specified, always [1, 0, 0]
 
-    arguments
-        vec
-        iptype
-        optype
-        p = [1, 0, 0]
-    end
+    p = [1, 0, 0];
 
     switch iptype
         case 'cartesian'
