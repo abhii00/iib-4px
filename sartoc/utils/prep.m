@@ -16,8 +16,4 @@ prepinfo(info, fn);
 [tgs, ks, lambdas] = prepgain(out, fn);
 
 %prep aux data
-if (exist('aux','var') == 1)
-    if aux
-        [ts, thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b] = prepaux(out, fn);
-    end
-end
+[ts, thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b, xs_ls] = prepaux(out, fn);

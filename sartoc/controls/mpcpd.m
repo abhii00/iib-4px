@@ -38,9 +38,14 @@ function g = mpcpd(costfunction)
     
             %fix blockpath
             bp = states_cur{i}.BlockPath;
-            bp_new = Simulink.BlockPath({strrep(bp.getBlock(1), loop_real, loop_model), ...
-                                        strrep(bp.getBlock(2), sc_real, sc_model)});
-    
+            bp_length = getLength(bp);
+            if (bp_length==1) %case for non-sc-model paths
+                bp_new = Simulink.BlockPath({strrep(bp.getBlock(1), loop_real, loop_model)});
+            elseif (bp_length==2) %case for sc-model paths
+                bp_new = Simulink.BlockPath({strrep(bp.getBlock(1), loop_real, loop_model), ...
+                                            strrep(bp.getBlock(2), sc_real, sc_model)});
+            end
+
             %set new state labels
             states_cur{i}.Name = nm_new;
             states_cur{i}.Values = val_new;

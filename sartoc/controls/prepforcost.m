@@ -16,20 +16,27 @@ function [ts, es, ws_rw, thetas] = prepforcost(out)
     qs_tar = getdatasamples(out.q_tar, 1:length(ts));
     ws_rw = getdatasamples(out.w_rw, 1:length(ts));
 
-    thetas = zeros(size(ts));
-    if (evalin('base', "exist('aux', 'var')") == 1)
-        if evalin('base', 'aux')
-            thetas_sp1a = getdatasamples(out.theta_sp1a, 1:length(ts));
-            thetas_sp1b = getdatasamples(out.theta_sp1b, 1:length(ts));
-            thetas_sp2a = getdatasamples(out.theta_sp2a, 1:length(ts));
-            thetas_sp2b = getdatasamples(out.theta_sp2b, 1:length(ts));
-            thetas_sp1a = permute(thetas_sp1a, [3, 1, 2]);
-            thetas_sp1b = permute(thetas_sp1b, [3, 1, 2]);
-            thetas_sp2a = permute(thetas_sp2a, [3, 1, 2]);
-            thetas_sp2b = permute(thetas_sp2b, [3, 1, 2]);
-            thetas = [thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b];
-        end
+    solar_panels = false;
+    if ~(isempty(find(out, 'theta_sp1a')))
+        solar_panels = true;
     end
+
+    if (solar_panels)
+        thetas_sp1a = getdatasamples(out.theta_sp1a, 1:length(ts));
+        thetas_sp1b = getdatasamples(out.theta_sp1b, 1:length(ts));
+        thetas_sp2a = getdatasamples(out.theta_sp2a, 1:length(ts));
+        thetas_sp2b = getdatasamples(out.theta_sp2b, 1:length(ts));
+        thetas_sp1a = permute(thetas_sp1a, [3, 1, 2]);
+        thetas_sp1b = permute(thetas_sp1b, [3, 1, 2]);
+        thetas_sp2a = permute(thetas_sp2a, [3, 1, 2]);
+        thetas_sp2b = permute(thetas_sp2b, [3, 1, 2]);
+    else
+        thetas_sp1a = zeros(size(ts));
+        thetas_sp1b = zeros(size(ts));
+        thetas_sp2a = zeros(size(ts));
+        thetas_sp2b = zeros(size(ts));
+    end
+    thetas = [thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b];
 
     %calculate error
     es = zeros(size(ts));
