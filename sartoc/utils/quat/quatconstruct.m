@@ -1,4 +1,4 @@
-function q = quatconstruct(vec, iptype, optype)
+function q = quatconstruct(vec, iptype, optype, p)
 %creates a quaternion from a standard direction or rotation vector
 %
 %Arguments:
@@ -19,7 +19,12 @@ function q = quatconstruct(vec, iptype, optype)
 %   p (3x1 vector): the vector to be pointed in direction, required if 
 %   direction vector specified, always [1, 0, 0]
 
-    p = [1, 0, 0];
+    arguments
+        vec
+        iptype
+        optype
+        p = [1, 0, 0]
+    end
 
     switch iptype
         case 'cartesian'
