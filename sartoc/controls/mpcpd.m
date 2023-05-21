@@ -15,56 +15,57 @@ function g = mpcpd(costfunction)
     %INITIAL STATE FOR PREDICTION
     %extract states from current sim by forcing log write
     set_param(loop_real, 'SimulationCommand', 'WriteDataLogs');
-    out_cur = evalin('base', 'out');
-    states_cur = out_cur.states;
-    clearvars out_cur;
+    out_real = evalin('base', 'out');
+    states_real = out_real.states;
+    clearvars out_real;
     
     %extract states from model by forcing log write
     assignin('base', 'k', g(1:3));
     assignin('base', 'lambda', g(4:6));
     out_model = sim(loop_model, 'StopTime', num2str(1));
-    states_needed = out_model.states;
+    states_model = out_model.states;
     clearvars out_model;
 
-    states_to_remove = [];
-    
-    %modify initial state labels
-    for i = 1:numElements(states_cur)
-        %replace name from sc_real -> sc_model
-        nm = states_cur{i}.Name;
-        nm_new = strrep(nm, sc_real, sc_model);
-
-        %check if state exists in needed states
-        check_in_states_needed = [];
-        for j = 1:numElements(states_needed)
-            check_in_states_needed = [check_in_states_needed contains(states_needed{j}.Name, nm_new)];
+    %modify initial states
+    states_to_remove_for_model = [];
+    states_for_model = states_real;
+    for i=1:numElements(states_real)
+        %change blockpath from sc_real, loop_real to sc_model,
+        %loop_model
+        bp_real = states_real{i}.BlockPath;
+        bp_length = getLength(bp_real);
+        if (bp_length==1) %case for non-sc-model paths (in loop)
+            bp_for_model = Simulink.BlockPath({strrep(bp_real.getBlock(1), loop_real, loop_model)});
+        elseif (bp_length==2) %case for sc-model paths
+            bp_for_model = Simulink.BlockPath({strrep(bp_real.getBlock(1), loop_real, loop_model), ...
+                                        strrep(bp_real.getBlock(2), sc_real, sc_model)});
         end
 
-        if any(check_in_states_needed)
-            %get last value
-            val_new = getsamples(states_cur{i}.Values, length(states_cur{i}.Values.Time));
-    
-            %fix blockpath
-            bp = states_cur{i}.BlockPath;
-            bp_length = getLength(bp);
-            if (bp_length==1) %case for non-sc-model paths
-                bp_new = Simulink.BlockPath({strrep(bp.getBlock(1), loop_real, loop_model)});
-            elseif (bp_length==2) %case for sc-model paths
-                bp_new = Simulink.BlockPath({strrep(bp.getBlock(1), loop_real, loop_model), ...
-                                            strrep(bp.getBlock(2), sc_real, sc_model)});
-            end
+        %check if real state exists in model states
+        is_real_in_model = [];
+        for j = 1:numElements(states_model)
+            is_real_in_model = [is_real_in_model isequal(states_model{j}.BlockPath, bp_for_model)];
+        end
 
-            %set new state labels
-            states_cur{i}.Name = nm_new;
-            states_cur{i}.Values = val_new;
-            states_cur{i}.BlockPath = bp_new;
+        %if real state in model states
+        if any(is_real_in_model)
+            %change name from sc_real to sc_model
+            nm_real = states_real{i}.Name;
+            nm_for_model = strrep(nm_real, sc_real, sc_model);
+
+            %change to last value
+            val_for_model = getsamples(states_real{i}.Values, length(states_real{i}.Values.Time));
+            
+            %update
+            states_for_model{i}.Name = nm_for_model;
+            states_for_model{i}.Values = val_for_model;
+            states_for_model{i}.BlockPath = bp_for_model;
         else
-            states_to_remove = [states_to_remove i];
+            states_to_remove_for_model = [states_to_remove_for_model i];
         end
     end
-
-    states_cur = removeElement(states_cur, states_to_remove);
-    clearvars states_to_remove;
+    states_for_model = removeElement(states_for_model, states_to_remove_for_model);
+    clearvars states_to_remove_for_model states_real states_model;
 
     %OPTIMISE
     %perform gradient descent
@@ -85,7 +86,7 @@ function g = mpcpd(costfunction)
         gradC = ones(6, 1);
 
         %C(g)
-        C0 = predictcost(loop_model, states_cur, pred_horizon, costfunction, g);
+        C0 = predictcost(loop_model, states_for_model, pred_horizon, costfunction, g);
         disp(['Predicted C(0) = ' num2str(C0)])
         if (i == 1)
             C0_0 = C0;
@@ -94,7 +95,7 @@ function g = mpcpd(costfunction)
         parfor n=1:length(dgs)
             %C(g+dg)
             g_test = g + dgs_mat(:, n);
-            Cs(n) = predictcost(loop_model, states_cur, pred_horizon, costfunction, g_test);
+            Cs(n) = predictcost(loop_model, states_for_model, pred_horizon, costfunction, g_test);
             disp(['Predicted C(' num2str(n) ') = ' num2str(Cs(n)) ' with g = ' num2str(g_test.')])
         end
 
