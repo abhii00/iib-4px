@@ -27,11 +27,6 @@ function cost = evaluatecost(costfunction, ts, es, ws_rw, thetas, taus)
             Q = 2.5e4;
             cumcost = cumtrapz(ts, es.^2 + Q*dot(thetas, thetas, 2));
             cost = cumcost(end);
-        case 4
-            %e^2 + Zws_rw^2
-            Z = 2e-4;
-            cumcost = cumtrapz(ts, es.^2 + Z*dot(ws_rw, ws_rw, 2));
-            cost = cumcost(end);
         otherwise
             %no cost
             cost = 0;
