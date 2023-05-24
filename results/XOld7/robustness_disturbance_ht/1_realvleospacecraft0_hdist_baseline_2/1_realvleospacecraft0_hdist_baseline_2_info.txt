@@ -1,0 +1,1 @@
+1: Step of pi/2 around yz. 200s. baseline: [1 1 1] [50 50 50]. 5: e^2 + 1.5e-4*ws_rw^2.

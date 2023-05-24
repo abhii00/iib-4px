@@ -12,7 +12,7 @@ load([fn '_aux.mat'])
 thetas = [thetas_sp1a, thetas_sp1b, thetas_sp2a, thetas_sp2b];
 
 %visualise error
-visualiseperf(qs_acc, qs_tar, ws_rw, thetas, ts, costfunction, rt_taken, fn);
+visualiseperf(qs_acc, qs_tar, ws_rw, thetas, taus, ts, costfunction, rt_taken, fn);
 
 %visualise control
 visualisecont(ws_rw, taus, ts, ks, lambdas, tgs, fn);

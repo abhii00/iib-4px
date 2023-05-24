@@ -1,4 +1,4 @@
-function [ts, es, ws_rw, thetas] = prepforcost(out)
+function [ts, es, ws_rw, thetas, taus] = prepforcost(out)
 %preps data for the cost function
 %
 %Arguments:
@@ -9,12 +9,14 @@ function [ts, es, ws_rw, thetas] = prepforcost(out)
 %   es (list(float)): list of errors
 %   ws_rw (array(float)): array of reaction wheel velocities
 %   thetas (array(float)): array of solar panel angles
+%   taus (array(float)): array of control torques
 
     %get out data
     ts = out.tout;
     qs_acc = getdatasamples(out.q_acc, 1:length(ts));
     qs_tar = getdatasamples(out.q_tar, 1:length(ts));
     ws_rw = getdatasamples(out.w_rw, 1:length(ts));
+    taus = getdatasamples(out.tau, 1:length(ts));
 
     solar_panels = false;
     if ~(isempty(find(out, 'theta_sp1a')))
