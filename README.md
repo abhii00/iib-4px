@@ -1,8 +1,5 @@
 Real-time Optimal Control of Spacecraft Attitude
 ================================================
-
-Abhijit Pandit
-
 File Structure
 --------------
 <pre>
